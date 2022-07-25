@@ -46,19 +46,14 @@ export class AppController {
     );
   }
 
-  @Get('/confirm')
+  @Post('/confirm')
   async confirmPayment(@Body() params, @Res() res) {
-    console.log({ params });
     if (!params.PaRes) res.status(400).send('wrong params');
 
     const inflated = Zlib.inflateSync(
       Buffer.from(params.PaRes, 'base64'),
     ).toString();
     const isSuccessPayment = inflated.includes('<status>Y</status>');
-    console.log({ inflated });
-
-    console.log({ isSuccessPayment });
-
     const response = isSuccessPayment ? 'suceess' : 'error';
 
     res.send(response);
