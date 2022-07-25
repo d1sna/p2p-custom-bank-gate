@@ -10,9 +10,6 @@ window.onload = function () {
   const generatecard = document.getElementById('generatecard');
   const sendbutton = document.getElementById('send-button');
 
-  //   let cctype = null;
-
-  //Mask the Credit Card Number Input
   var cardnumber_mask = new IMask(cardnumber, {
     mask: [
       {
@@ -35,16 +32,6 @@ window.onload = function () {
         regex: '^(5[1-5]\\d{0,2}|22[2-9]\\d{0,1}|2[3-7]\\d{0,2})\\d{0,12}',
         cardtype: 'mastercard',
       },
-      // {
-      //     mask: '0000-0000-0000-0000',
-      //     regex: '^(5019|4175|4571)\\d{0,12}',
-      //     cardtype: 'dankort'
-      // },
-      // {
-      //     mask: '0000-0000-0000-0000',
-      //     regex: '^63[7-9]\\d{0,13}',
-      //     cardtype: 'instapayment'
-      // },
       {
         mask: '0000 000000 00000',
         regex: '^(?:2131|1800)\\d{0,11}',
@@ -60,11 +47,6 @@ window.onload = function () {
         regex: '^(?:5[0678]\\d{0,2}|6304|67\\d{0,2})\\d{0,12}',
         cardtype: 'maestro',
       },
-      // {
-      //     mask: '0000-0000-0000-0000',
-      //     regex: '^220[0-4]\\d{0,12}',
-      //     cardtype: 'mir'
-      // },
       {
         mask: '0000 0000 0000 0000',
         regex: '^4\\d{0,15}',
@@ -224,7 +206,7 @@ window.onload = function () {
     const expirationDateValue = expirationdate.value;
     const securityCodeValue = securitycode.value;
     const amountValue = amount.value;
-
+    console.log(process.env.HOST);
     if (
       cardNumberValue.length !== 19 ||
       !expirationDateValue ||
@@ -233,7 +215,7 @@ window.onload = function () {
     )
       return alert('Wrong card data');
 
-    location.href = `http://localhost:7000/pay?cardNumber=${cardNumberValue}&expiryDate=${expirationDateValue}&securityCode=${securityCodeValue}&moneyAmount=${amountValue}`;
+    location.href = `${process.env.HOST}/pay?cardNumber=${cardNumberValue}&expiryDate=${expirationDateValue}&securityCode=${securityCodeValue}&moneyAmount=${amountValue}`;
     return;
   });
 

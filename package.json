@@ -26,9 +26,11 @@
     "@nestjs/platform-express": "^8.0.0",
     "axios": "^0.27.2",
     "imask": "^6.4.2",
+    "pako": "^2.0.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",

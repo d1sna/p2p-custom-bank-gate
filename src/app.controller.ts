@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
 import axios from 'axios';
 import { AppService } from './app.service';
+const Zlib = require('zlib');
 
 @Controller()
 export class AppController {
@@ -27,14 +28,13 @@ export class AppController {
         },
       },
     });
-    console.log({ response });
 
     res.send(
       `<html>
         <body OnLoad="OnLoadEvent();">        
         <form name="mainform" action="${response.data.confirmationData['3DSecure'].url}" method="POST">
         <input type="hidden" name="PaReq" value="${response.data.confirmationData['3DSecure'].requestSecretCode}">
-        <input type="hidden" name="TermUrl" value="https://google.com">
+        <input type="hidden" name="TermUrl" value=${process.env.HOST}/confirm>
         <input type="hidden" name="MD" value="${response.data.confirmationData['3DSecure'].merchantData}"> 
         </form>
         <SCRIPT LANGUAGE="Javascript">
@@ -44,11 +44,24 @@ export class AppController {
       </body>
         </html>`,
     );
-    return;
   }
 
-  @Get('/')
-  async getForm(@Res() res) {
-    res.status(200).send('privet');
+  @Get('/confirm')
+  async confirmPayment(@Body() params, @Res() res) {
+    console.log({ params });
+    if (!params.PaRes) res.status(400).send('wrong params');
+
+    const inflated = Zlib.inflateSync(
+      Buffer.from(params.PaRes, 'base64'),
+    ).toString();
+    const isSuccessPayment = inflated.includes('<status>Y</status>');
+    console.log({ inflated });
+
+    console.log({ isSuccessPayment });
+
+    const response = isSuccessPayment ? 'suceess' : 'error';
+
+    res.send(response);
+    res.end();
   }
 }
