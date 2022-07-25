@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  gos-api:
+    container_name: p2p_gate
+    image: p2p_nest:latest
+    environment:
+      - HOST=http://m-apps.ru
+    depends_on:
+      - db
+    ports:
+      - 7000:7000
