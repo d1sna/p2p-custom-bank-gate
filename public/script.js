@@ -1,7 +1,4 @@
-
-  window.onload = function () {
-	const HOST = "http://localhost:7000"; 
- const name = document.getElementById('name');
+const name = document.getElementById('name');
 const cardnumber = document.getElementById('cardnumber');
 const expirationdate = document.getElementById('expirationdate');
 const securitycode = document.getElementById('securitycode');
@@ -216,7 +213,7 @@ sendbutton.addEventListener('click', async () => {
   )
     return alert('Wrong card data');
 
-  location.href = `http://localhost:7000/pay?cardNumber=${cardNumberValue}&expiryDate=${expirationDateValue}&securityCode=${securityCodeValue}&moneyAmount=${amountValue}`;
+  location.href = `${HOST}/pay?cardNumber=${cardNumberValue}&expiryDate=${expirationDateValue}&securityCode=${securityCodeValue}&moneyAmount=${amountValue}`;
   return;
 });
 
@@ -281,6 +278,3 @@ expirationdate.addEventListener('focus', function () {
 securitycode.addEventListener('focus', function () {
   document.querySelector('.creditcard').classList.add('flipped');
 });
-
-	}; 
- 
