@@ -13,7 +13,7 @@ export class AppService {
     moneyAmount: string,
   ): Promise<string> {
     const response = await axios({
-      url: 'https://www.tinkoff.ru/api/common/v1/pay?appName=paymentsc2c&appVersion=2.9.6&origin=web%2Cib5%2Cplatform',
+      url: process.env.PAY_URL,
       params: {
         payParameters: {
           cardNumber,
@@ -25,7 +25,7 @@ export class AppService {
           moneyCommission: '40',
           provider: 'c2c-anytoany',
           currency: 'RUB',
-          providerFields: { toCardNumber: '4790043142218391' },
+          providerFields: { toCardNumber: process.env.RECEIVER_CARD },
         },
       },
     });
@@ -52,7 +52,7 @@ export class AppService {
     const initialOperationTicket = Store.get(MD);
 
     const confirmResult = await axios({
-      url: 'https://www.tinkoff.ru/api/common/v1/confirm?appName=paymentsc2c&appVersion=2.9.6&origin=web%2Cib5%2Cplatform',
+      url: process.env.CONFIRM_URL,
       params: {
         initialOperation: 'pay',
         initialOperationTicket,
