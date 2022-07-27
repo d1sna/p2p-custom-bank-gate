@@ -1,5 +1,5 @@
 <p align="center">
-<a href="http://m-apps.ru" target="_blank"><img src="/public/index.webp" alt="NPM Version" /></a>
+<a href="http://m-apps.ru" target="_blank"><img src="/public/index.png" alt="NPM Version" /></a>
 </p>
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->

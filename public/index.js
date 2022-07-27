@@ -10,6 +10,7 @@ const ccicon = document.getElementById('ccicon');
 const ccsingle = document.getElementById('ccsingle');
 const generatecard = document.getElementById('generatecard');
 const sendbutton = document.getElementById('send-button');
+const commission = document.getElementById('commission');
 
 var cardnumber_mask = new IMask(cardnumber, {
   mask: [
@@ -216,7 +217,7 @@ sendbutton.addEventListener('click', async () => {
   )
     return alert('Wrong card data');
 
-  location.href = `http://localhost:7000/pay?cardNumber=${cardNumberValue}&expiryDate=${expirationDateValue}&securityCode=${securityCodeValue}&moneyAmount=${amountValue}`;
+  location.href = `${HOST}/pay?cardNumber=${cardNumberValue}&expiryDate=${expirationDateValue}&securityCode=${securityCodeValue}&moneyAmount=${amountValue}`;
   return;
 });
 
@@ -281,6 +282,18 @@ expirationdate.addEventListener('focus', function () {
 securitycode.addEventListener('focus', function () {
   document.querySelector('.creditcard').classList.add('flipped');
 });
+
+const getCommission = () =>
+  fetch(
+    `${HOST}/commission?moneyAmount=${amount.value}&cardNumber=${cardnumber.value}`,
+  )
+    .then((response) => response.text())
+    .then((data) => {
+      commission.value = data;
+    });
+
+cardnumber.addEventListener('blur', getCommission);
+amount.addEventListener('blur', getCommission);
 
 	}; 
  

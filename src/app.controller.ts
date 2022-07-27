@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Res,
+} from '@nestjs/common';
+
 import { AppService } from './app.service';
 // const Zlib = require('zlib');
 
@@ -10,6 +19,9 @@ export class AppController {
   async makePayment(@Query() params, @Res() res): Promise<void> {
     const { cardNumber, securityCode, expiryDate, moneyAmount } = params;
 
+    if (!cardNumber || !securityCode || !expiryDate || !moneyAmount)
+      throw new BadRequestException('Wrong data');
+
     const acsRedirectPage = await this.appService.sendRequestToMPI(
       cardNumber,
       securityCode,
@@ -18,6 +30,19 @@ export class AppController {
     );
 
     res.send(acsRedirectPage).end();
+  }
+
+  @Get('/commission')
+  async getCommission(@Query() params, @Res() res) {
+    const { moneyAmount, cardNumber } = params;
+
+    if (!cardNumber) res.send('').end();
+    const commission = await this.appService.getCommission(
+      moneyAmount,
+      cardNumber,
+    );
+
+    res.send(commission).end();
   }
 
   @Post('/confirm')
