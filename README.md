@@ -49,6 +49,7 @@ $ nano .env # setup env
 PORT - app start port
 HOST - your url for getting access to app
 RECEIVER_CARD - card number to receive money
+... OTHER ENV FROM env.template
 
 2. Run app
 
