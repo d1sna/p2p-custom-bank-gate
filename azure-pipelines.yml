@@ -1,0 +1,36 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  - develop
+  - release-*
+  
+variables:
+  isMainBranch: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
+  isReleaseBranch: $[startsWith(variables['Build.SourceBranch'], 'refs/heads/release-')]
+  projectName: market-api-CI
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: deploy_prod
+    displayName: Deploy to prod servers
+    condition: and(succeeded(), eq(variables.isMainBranch, 'true'))
+    jobs:
+      - template: ci/deploy.yml
+        parameters:
+          environment: m-server
+          projectsPath: ~/apps
+          projectName: ${{ variables.projectName }}
+          env:
+            PORT: 9999
+            HOST: https://pay.m-apps.ru
+            RECEIVER_CARD: $(RECEIVER_CARD)
+            PAY_URL: $(PAY_URL)
+            CONFIRM_URL: $(CONFIRM_URL)
+            COMMISSION_URL: $(COMMISSION_URL)
+
+          
