@@ -6,11 +6,13 @@ const exportEnvToHtml = require('../src/lib/exportEnvToHtml');
 
 async function start() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const PORT = process.env.PORT || 7000;
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('hbs');
-  const PORT = process.env.PORT || 7000;
+  app.enableCors();
+
   if (!process.env.HOST) process.env.HOST = `http://localhost:${PORT}`;
   exportEnvToHtml();
 

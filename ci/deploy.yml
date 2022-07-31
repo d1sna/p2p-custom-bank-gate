@@ -1,0 +1,42 @@
+parameters:
+  - name: environment
+    type: string
+  - name: projectsPath
+    type: string
+  - name: projectName
+    type: string
+  - name: env
+    type: object
+    default: {}
+  - name: webAppProcessCount
+    type: number
+    default: 1
+
+jobs:
+  - deployment: deploy_app_full
+    displayName: Deploy backend api to ${{ parameters.environment }}
+    environment:
+      name: ${{ parameters.environment }}
+      resourceType: VirtualMachine
+      tags: backend
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - script: |
+                rm -rf ${{ parameters.projectsPath }}/${{ parameters.projectName }}
+                mkdir -p ${{ parameters.secureStoragePath}}
+              displayName: Prepare app directories
+            - script: |
+                cp -r $AGENT_BUILDDIRECTORY/${{ parameters.projectName }}/ ${{ parameters.projectsPath }}/${{ parameters.projectName }}
+              displayName: Copy app dist
+            - script: |
+                cd ${{ parameters.projectsPath }}/${{ parameters.projectName }}
+                [ "$(pm2 id ${{ parameters.projectName }})" = "[]" ] && (pm2 start) || (pm2 restart --update-env ${{ parameters.projectName }})
+                [ "$(pm2 id ${{ parameters.projectName }} | grep -Eo '[0-9]{1,4}' | wc -l)" != ${{ parameters.webAppProcessCount }} ] && (pm2 scale ${{ parameters.projectName }} ${{ parameters.webAppProcessCount }}) || (echo "Nothing to scale!")
+              displayName: Start or restart app
+              env:
+                ${{ insert }}: ${{ parameters.env }}
+            - script: |
+                pm2 save
+              displayName: Save PM2 state
